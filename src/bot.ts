@@ -1,5 +1,7 @@
 import { Client, GatewayIntentBits } from "discord.js";
 
+require("dotenv").config();
+
 const TOKEN = process.env.TOKEN as string;
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
