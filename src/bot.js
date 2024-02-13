@@ -7,7 +7,7 @@ import {
 } from "discord.js";
 
 import { config } from "./config.js";
-import roles from "./cmd/roles.js";
+import roles from "./commands/roles.js";
 
 const client = new Client({
   intents: [
