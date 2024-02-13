@@ -1,7 +1,14 @@
-import { REST, Client, GatewayIntentBits } from "discord.js";
-import { config } from "./config";
+import {
+  REST,
+  Routes,
+  Client,
+  GatewayIntentBits,
+  PermissionFlagsBits,
+} from "discord.js";
 
-//#region Client intents
+import { config } from "./config.js";
+import roles from "./cmd/roles.js";
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -10,13 +17,11 @@ const client = new Client({
     GatewayIntentBits.GuildModeration,
   ],
 });
-//#endregion
 
 const rest = new REST({ version: "10" }).setToken(config.DISCORD_TOKEN);
 
-//#region Function
 async function main() {
-  const commands = [];
+  const commands = [roles];
 
   try {
     console.log("Started refreshing application (/) commands.");
@@ -30,21 +35,57 @@ async function main() {
       }
     );
 
-    client.login(DISCORD_TOKEN);
+    client.login(config.DISCORD_TOKEN);
   } catch (err) {
     console.log(err);
   }
 }
-//#endregion
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-//#region Interaction
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
+
+  if (interaction.commandName === "addrole") {
+    const targetMember = interaction.options.getMember("target");
+    const role = interaction.options.getRole("role");
+
+    // Permission check (make sure the bot can manage the role)
+    if (
+      !targetMember.guild.members.me.permissions.has(
+        PermissionFlagsBits.ManageRoles
+      ) ||
+      role.position >= targetMember.guild.members.me.roles.highest.position
+    ) {
+      return interaction.reply({
+        content: "I don't have permission to manage that role.",
+        ephemeral: true,
+      });
+    }
+
+    // Check if the target member already has the role
+    if (targetMember.roles.cache.has(role.id)) {
+      return interaction.reply({
+        content: "That user already has that role.",
+        ephemeral: true,
+      });
+    }
+
+    try {
+      await targetMember.roles.add(role);
+      await interaction.reply(
+        `Successfully added the ${role.name} role to ${targetMember.user.tag}.`
+      );
+    } catch (err) {
+      console.error(err);
+      await interaction.reply({
+        content: "There was an error adding the role.",
+        ephemeral: true,
+      });
+    }
+  }
 });
-//#endregion
 
 main();
