@@ -20,27 +20,6 @@ const client = new Client({
 
 const rest = new REST({ version: "10" }).setToken(config.DISCORD_TOKEN);
 
-async function main() {
-  const commands = [roles];
-
-  try {
-    console.log("Started refreshing application (/) commands.");
-    await rest.put(
-      Routes.applicationGuildCommands(
-        config.DISCORD_CLIENT_ID,
-        config.DISCORD_GUILD_ID
-      ),
-      {
-        body: commands,
-      }
-    );
-
-    client.login(config.DISCORD_TOKEN);
-  } catch (err) {
-    console.log(err);
-  }
-}
-
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -87,5 +66,26 @@ client.on("interactionCreate", async (interaction) => {
     }
   }
 });
+
+async function main() {
+  const commands = [roles];
+
+  try {
+    console.log("Started refreshing application (/) commands.");
+    await rest.put(
+      Routes.applicationGuildCommands(
+        config.DISCORD_CLIENT_ID,
+        config.DISCORD_GUILD_ID
+      ),
+      {
+        body: commands,
+      }
+    );
+
+    client.login(config.DISCORD_TOKEN);
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 main();
