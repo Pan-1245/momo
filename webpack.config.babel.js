@@ -1,11 +1,12 @@
 import path from "path";
 
 export default {
-  entry: "./src/bot.js",
+  entry: "./src/index.js",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
   },
+  target: "node",
   module: {
     rules: [
       {
@@ -19,8 +20,5 @@ export default {
         },
       },
     ],
-  },
-  resolve: {
-    extensions: [".js", ".jsx"],
   },
 };

@@ -1,7 +1,7 @@
 import {
   REST,
-  Routes,
   Client,
+  Routes,
   GatewayIntentBits,
   PermissionFlagsBits,
 } from "discord.js";
@@ -65,6 +65,10 @@ client.on("interactionCreate", async (interaction) => {
       });
     }
   }
+});
+
+client.on("messageDeleteBulk", async (messages) => {
+  console.log(`${messages.size} deleted.`);
 });
 
 async function main() {
