@@ -14,12 +14,16 @@ import (
 )
 
 func main() {
-	sess, err := discordgo.New("Bot TOKEN")
+	cfg, err := config.LoadConfigFromEnv()
+	if err != nil {
+		fmt.Println("Error loading configuration:", err)
+		return
+	}
+
+	sess, err := discordgo.New(cfg.Token)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	cfg := config.NewConfig()
 
 	sess.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if m.Author.ID == s.State.User.ID {
