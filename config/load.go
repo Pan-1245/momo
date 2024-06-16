@@ -10,7 +10,7 @@ import (
 func LoadConfigFromEnv() (*Config, error) {
 	godotenv.Load()
 
-	cfg := &Config{}
+	cfg := NewConfig()
 
 	token := os.Getenv("BOT_TOKEN")
 	if token == "" {
