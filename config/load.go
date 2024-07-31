@@ -16,7 +16,7 @@ func LoadConfigFromEnv() (*Config, error) {
 	if token == "" {
 		return nil, fmt.Errorf("missing environment variable BOT_TOKEN")
 	}
-	cfg.Token = token
+	cfg.Token = fmt.Sprintf("Bot %s", token)
 
 	return cfg, nil
 }
