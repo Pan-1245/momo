@@ -8,5 +8,6 @@ import (
 func RegisterHandlers(s *discordgo.Session, prefix string) {
 	// Add more handlers here...
 	s.AddHandler(ReadyHandler)
-	s.AddHandler(MessageHandler(prefix))
+	s.AddHandler(MessageHandlerWithPrefix(prefix))
+	s.AddHandler(MessageHandlerWithoutPrefix())
 }
