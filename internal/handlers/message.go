@@ -40,14 +40,7 @@ func MessageHandlerWithoutPrefix() func(s *discordgo.Session, m *discordgo.Messa
 			return
 		}
 
-		// Split the content into command and arguments
-		content := m.Content
-		args := strings.Fields(content)
-		if len(args) == 0 {
-			return
-		}
-
-		command := strings.ToLower(args[0])
+		command := strings.ToLower(m.Content)
 		executeCommandWithoutPrefix(s, m, command)
 	}
 }
@@ -56,8 +49,6 @@ func MessageHandlerWithoutPrefix() func(s *discordgo.Session, m *discordgo.Messa
 func executeCommandWithPrefix(s *discordgo.Session, m *discordgo.MessageCreate, command string) {
 	switch command {
 	// Add more subcommands here...
-	case "proverbs":
-		commands.Proverbs(s, m)
 	default:
 		s.ChannelMessageSend(m.ChannelID, "Unknown command.")
 	}
@@ -68,12 +59,18 @@ func executeCommandWithoutPrefix(s *discordgo.Session, m *discordgo.MessageCreat
 	switch command {
 	// Add more subcommands here...
 	case "hi":
-		commands.Hi(s, m)
-	case "hello":
-		commands.Hello(s, m)
+		commands.MessageResponses("hi", s, m)
+	case "fuck you", "fuck u", "fk you", "fk u", "f u", "fu":
+		commands.MessageResponses("fuck you", s, m)
 	case "yee":
-		commands.Yee(s, m)
+		commands.ImageResponses("yee", s, m)
+	case "oh shit":
+		commands.ImageResponses("oh shit", s, m)
+	case "eternal":
+		commands.ImageResponses("eternal", s, m)
+	case "tris", "tristan":
+		commands.ImageResponses("donald", s, m)
 	default:
-		s.ChannelMessageSend(m.ChannelID, "Unknown command.")
+		return
 	}
 }

@@ -21,3 +21,23 @@ func LoadConfigFromEnv() (*Config, error) {
 
 	return cfg, nil
 }
+
+func LoadStorageFromEnv() (*Storage, error) {
+	godotenv.Load()
+
+	strg := NewStorage()
+
+	sa := os.Getenv("GOOGLE_SERVICE_ACCOUNT")
+	if sa == "" {
+		log.Fatalf("missing environment variable GOOGLE_SERVICE_ACCOUNT")
+	}
+	strg.ServiceAccount = sa
+
+	bucket := os.Getenv("GOOGLE_STORAGE_BUCKET")
+	if bucket == "" {
+		log.Fatalf("missing environment variable GOOGLE_STORAGE_BUCKET")
+	}
+	strg.Bucket = bucket
+
+	return strg, nil
+}
