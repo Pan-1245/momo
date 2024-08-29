@@ -34,7 +34,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error opening Discord session: %v", err)
 	}
-	defer sess.Close()
+	
+	defer func(sess *discordgo.Session) {
+        _ = sess.Close()
+    }(sess)
 
 	// WaitForShutdown waits for a termination signal to gracefully shut down the bot.
 	sc := make(chan os.Signal, 1)

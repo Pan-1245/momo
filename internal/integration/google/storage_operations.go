@@ -8,7 +8,7 @@ import (
 )
 
 // GenerateSignedURL generates a v4 signed URL for a specified object in a bucket.
-func (sc *GoogleStorageClient) GenerateSignedURL(bucketName, objectName string, expiry time.Duration) (string, error) {
+func (sc *StorageClient) GenerateSignedURL(bucketName, objectName string, expiry time.Duration) (string, error) {
 	url, err := sc.Client.Bucket(bucketName).SignedURL(objectName, &storage.SignedURLOptions{
 		Method:  "GET",
 		Expires: time.Now().Add(expiry),

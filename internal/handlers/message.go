@@ -7,7 +7,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// MessageHandler handles message creation events (with prefix).
+// MessageHandlerWithPrefix MessageHandler handles message creation events (with prefix).
 func MessageHandlerWithPrefix(prefix string) func(s *discordgo.Session, m *discordgo.MessageCreate) {
 	return func(s *discordgo.Session, m *discordgo.MessageCreate) {
 		// Ignore messages from the bot itself
@@ -32,7 +32,7 @@ func MessageHandlerWithPrefix(prefix string) func(s *discordgo.Session, m *disco
 	}
 }
 
-// MessageHandler handles message creation events (without prefix).
+// MessageHandlerWithoutPrefix MessageHandler handles message creation events (without prefix).
 func MessageHandlerWithoutPrefix() func(s *discordgo.Session, m *discordgo.MessageCreate) {
 	return func(s *discordgo.Session, m *discordgo.MessageCreate) {
 		// Ignore messages from the bot itself
@@ -50,7 +50,10 @@ func executeCommandWithPrefix(s *discordgo.Session, m *discordgo.MessageCreate, 
 	switch command {
 	// Add more subcommands here...
 	default:
-		s.ChannelMessageSend(m.ChannelID, "Unknown command.")
+        _, err := s.ChannelMessageSend(m.ChannelID, "Unknown command.")
+        if err != nil {
+            return
+        }
 	}
 }
 

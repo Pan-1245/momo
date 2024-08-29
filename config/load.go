@@ -9,7 +9,10 @@ import (
 )
 
 func LoadConfigFromEnv() (*Config, error) {
-	godotenv.Load()
+    err := godotenv.Load()
+    if err != nil {
+        return nil, err
+    }
 
 	cfg := NewConfig()
 
@@ -23,7 +26,10 @@ func LoadConfigFromEnv() (*Config, error) {
 }
 
 func LoadStorageFromEnv() (*Storage, error) {
-	godotenv.Load()
+    err := godotenv.Load()
+    if err != nil {
+        return nil, err
+    }
 
 	strg := NewStorage()
 

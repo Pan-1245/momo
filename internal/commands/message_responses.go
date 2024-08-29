@@ -14,5 +14,8 @@ func MessageResponses(cmd string, s *discordgo.Session, m *discordgo.MessageCrea
 	case "fuck you":
 		msg = fmt.Sprintf("No, fuck you <@%s>!", m.Author.ID)
 	}
-	s.ChannelMessageSend(m.ChannelID, msg)
+    _, err := s.ChannelMessageSend(m.ChannelID, msg)
+    if err != nil {
+        return
+    }
 }

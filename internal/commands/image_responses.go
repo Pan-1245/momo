@@ -19,10 +19,15 @@ func ImageResponses(cmd string, s *discordgo.Session, m *discordgo.MessageCreate
 	// Initialize the storage client
 	storageClient, err := google.NewStorageClient(strg.ServiceAccount)
 	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, "Oops! Something went wrong with Google Cloud Storage.")
+        _, err := s.ChannelMessageSend(m.ChannelID, "Oops! Something went wrong with Google Cloud Storage.")
+        if err != nil {
+            return
+        }
 		return
 	}
-	defer storageClient.Close()
+	defer func(storageClient *google.StorageClient) {
+        _ = storageClient.Close()
+    }(storageClient)
 
 	// Generate a signed URL for the object
 	bucketName := strg.Bucket
@@ -43,7 +48,10 @@ func ImageResponses(cmd string, s *discordgo.Session, m *discordgo.MessageCreate
 	expiry := 15 * time.Minute
 	url, err := storageClient.GenerateSignedURL(bucketName, objectName, expiry)
 	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, "Oops! Something went wrong while generating URL.")
+        _, err := s.ChannelMessageSend(m.ChannelID, "Oops! Something went wrong while generating URL.")
+        if err != nil {
+            return
+        }
 		return
 	}
 
@@ -57,6 +65,9 @@ func ImageResponses(cmd string, s *discordgo.Session, m *discordgo.MessageCreate
 	// Send a message for any error encountered.
 	_, err = s.ChannelMessageSendEmbed(m.ChannelID, embed)
 	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, "Oops! Something went wrong.")
+        _, err := s.ChannelMessageSend(m.ChannelID, "Oops! Something went wrong.")
+        if err != nil {
+            return
+        }
 	}
 }
